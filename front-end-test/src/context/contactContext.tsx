@@ -7,12 +7,22 @@ import React, {
 } from "react";
 import { Contact, ContactContextType } from "./contactContext.interface";
 
-
 const defaultContextValue: ContactContextType = {
   contacts: [],
+  modalOpen: false,
+  edit: {
+    id: 0,
+    firstName: "",
+    lastName: "",
+    phone: "",
+  },
+  isAddMode: true,
   addContact: () => {},
   editContact: () => {},
   removeContact: () => {},
+  setModalOpen: () => {},
+  setEdit: () => {},
+  setIsAddMode: () => {},
 };
 
 export const ContactContext =
@@ -29,6 +39,14 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({
   const [contacts, setContacts] = useState<Contact[]>(
     loadContactsFromLocalStorage,
   );
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [edit, setEdit] = useState<Contact>({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    phone: "",
+  });
+  const [isAddMode, setIsAddMode] = useState<boolean>(true);
 
   useEffect(() => {
     if (contacts.length > 0) {
@@ -62,7 +80,18 @@ export const ContactProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <ContactContext.Provider
-      value={{ contacts, addContact, editContact, removeContact }}>
+      value={{
+        contacts,
+        modalOpen,
+        edit,
+        isAddMode,
+        addContact,
+        editContact,
+        removeContact,
+        setModalOpen,
+        setEdit,
+        setIsAddMode,
+      }}>
       {children}
     </ContactContext.Provider>
   );
